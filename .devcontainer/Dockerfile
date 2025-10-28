@@ -112,8 +112,8 @@ ENV PATH=$PATH:/usr/local/go/bin
 #
 # Install Erlang
 #
-ENV OTP_VERSION="27.3.4.3" \
-	OTP_DOWNLOAD_SHA256="597618c75890e8e606033bc8dbf6ec87fdf4e892c10b4912ae3c9a4f01384579"
+ENV OTP_VERSION="27.3.4.4" \
+	OTP_DOWNLOAD_SHA256="cf9adc243864749c892c5c94a92dfe08a5d71ff612d8f210afb012777e16006c"
 RUN set -xe \
 	&& OTP_DOWNLOAD_URL="https://github.com/erlang/otp/releases/download/OTP-${OTP_VERSION}/otp_src_${OTP_VERSION}.tar.gz" \
 	&& runtimeDeps='libodbc1 \
