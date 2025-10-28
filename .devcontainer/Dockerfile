@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/devcontainers/base:bookworm
 
-# Install Erlang
-ENV OTP_VERSION="27.3.4.3"
+#
+# Installing various tools
+#
 # buildpack-deps:bookworm-curl
 RUN set -eux; \
 	apt-get update; \
@@ -74,6 +75,29 @@ RUN set -ex; \
 		zlib1g-dev \
 	; \
 	rm -rf /var/lib/apt/lists/*
+
+#
+# Install Lua
+#
+RUN apt-get update && apt-get install -y lua5.4
+
+#
+# Install Go
+#
+ENV GO_LANG_VERSION="1.25.3"
+RUN set -xe \
+	&& GO_LANG_DOWNLOAD_URL="https://go.dev/dl/go${GO_LANG_VERSION}.linux-amd64.tar.gz" \
+	&& GO_LANG_DOWNLOAD_SHA256="0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f" \
+	&& curl -fSL -o go.linux-amd64.tar.gz $GO_LANG_DOWNLOAD_URL \
+	&& echo "$GO_LANG_DOWNLOAD_SHA256  go.linux-amd64.tar.gz" | sha256sum -c - \
+	&& tar -C /usr/local -xzf go.linux-amd64.tar.gz \
+	&& rm go.linux-amd64.tar.gz
+ENV PATH=$PATH:/usr/local/go/bin
+
+#
+# Install Erlang
+#
+ENV OTP_VERSION="27.3.4.3"
 RUN set -xe \
 	&& OTP_DOWNLOAD_URL="https://github.com/erlang/otp/releases/download/OTP-${OTP_VERSION}/otp_src_${OTP_VERSION}.tar.gz" \
 	&& OTP_DOWNLOAD_SHA256="597618c75890e8e606033bc8dbf6ec87fdf4e892c10b4912ae3c9a4f01384579" \
@@ -103,7 +127,9 @@ RUN set -xe \
 	&& apt-get purge -y --auto-remove $buildDeps \
 	&& rm -rf $ERL_TOP /var/lib/apt/lists/*
 
+#
 # Install Elixir
+#
 ENV ELIXIR_VERSION="v1.19.1" \
 	LANG=C.UTF-8
 RUN set -xe \
@@ -118,17 +144,3 @@ RUN set -xe \
 	&& make install clean \
 	&& find /usr/local/src/elixir/ -type f -not -regex "/usr/local/src/elixir/lib/[^\/]*/lib.*" -exec rm -rf {} + \
 	&& find /usr/local/src/elixir/ -type d -depth -empty -delete
-
-# Install Lua
-RUN apt-get update && apt-get install -y lua5.4
-
-# Install Go
-ENV GO_LANG_VERSION="1.25.3"
-RUN set -xe \
-	&& GO_LANG_DOWNLOAD_URL="https://go.dev/dl/go${GO_LANG_VERSION}.linux-amd64.tar.gz" \
-	&& GO_LANG_DOWNLOAD_SHA256="0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f" \
-	&& curl -fSL -o go.linux-amd64.tar.gz $GO_LANG_DOWNLOAD_URL \
-	&& echo "$GO_LANG_DOWNLOAD_SHA256  go.linux-amd64.tar.gz" | sha256sum -c - \
-	&& tar -C /usr/local -xzf go.linux-amd64.tar.gz \
-	&& rm go.linux-amd64.tar.gz
-ENV PATH=$PATH:/usr/local/go/bin
