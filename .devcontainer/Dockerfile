@@ -84,11 +84,11 @@ RUN apt-get update && apt-get install -y lua5.4
 #
 # Install Chez Scheme
 #
-ENV CHEZ_SCHEME_VERSION="v10.2.0"
+ENV CHEZ_SCHEME_VERSION="v10.2.0" \
+	CHEZ_SCHEME_DOWNLOAD_SHA256="b795916d4cfed59240c5f44b1b507a8657efd28e62e72e134d03486e9f3e374a"
 RUN set -xe \
 	&& CHEZ_SCHEME_DIR="cs${CHEZ_SCHEME_VERSION}" \
 	&& CHEZ_SCHEME_DOWNLOAD_URL="https://github.com/cisco/ChezScheme/releases/download/${CHEZ_SCHEME_VERSION}/cs${CHEZ_SCHEME_VERSION}.tar.gz" \
-	&& CHEZ_SCHEME_DOWNLOAD_SHA256="b795916d4cfed59240c5f44b1b507a8657efd28e62e72e134d03486e9f3e374a" \
 	&& curl -fSL -o chez_scheme.tar.gz $CHEZ_SCHEME_DOWNLOAD_URL \
 	&& echo "$CHEZ_SCHEME_DOWNLOAD_SHA256  chez_scheme.tar.gz" | sha256sum -c - \
 	&& tar -xzf chez_scheme.tar.gz \
@@ -99,10 +99,10 @@ RUN set -xe \
 #
 # Install Go
 #
-ENV GO_LANG_VERSION="1.25.3"
+ENV GO_LANG_VERSION="1.25.3" \
+	GO_LANG_DOWNLOAD_SHA256="0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f"
 RUN set -xe \
 	&& GO_LANG_DOWNLOAD_URL="https://go.dev/dl/go${GO_LANG_VERSION}.linux-amd64.tar.gz" \
-	&& GO_LANG_DOWNLOAD_SHA256="0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f" \
 	&& curl -fSL -o go.linux-amd64.tar.gz $GO_LANG_DOWNLOAD_URL \
 	&& echo "$GO_LANG_DOWNLOAD_SHA256  go.linux-amd64.tar.gz" | sha256sum -c - \
 	&& tar -C /usr/local -xzf go.linux-amd64.tar.gz \
@@ -112,10 +112,10 @@ ENV PATH=$PATH:/usr/local/go/bin
 #
 # Install Erlang
 #
-ENV OTP_VERSION="27.3.4.3"
+ENV OTP_VERSION="27.3.4.3" \
+	OTP_DOWNLOAD_SHA256="597618c75890e8e606033bc8dbf6ec87fdf4e892c10b4912ae3c9a4f01384579"
 RUN set -xe \
 	&& OTP_DOWNLOAD_URL="https://github.com/erlang/otp/releases/download/OTP-${OTP_VERSION}/otp_src_${OTP_VERSION}.tar.gz" \
-	&& OTP_DOWNLOAD_SHA256="597618c75890e8e606033bc8dbf6ec87fdf4e892c10b4912ae3c9a4f01384579" \
 	&& runtimeDeps='libodbc1 \
 			libsctp1 \
 			libwxgtk3.2 \
@@ -146,10 +146,10 @@ RUN set -xe \
 # Install Elixir
 #
 ENV ELIXIR_VERSION="v1.19.1" \
+	ELIXIR_DOWNLOAD_SHA256="4dfbfa2d0863bb3809109757a599b453e78ea890f31fa54456a2d81b40bc930f" \
 	LANG=C.UTF-8
 RUN set -xe \
 	&& ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/${ELIXIR_VERSION}.tar.gz" \
-	&& ELIXIR_DOWNLOAD_SHA256="4dfbfa2d0863bb3809109757a599b453e78ea890f31fa54456a2d81b40bc930f" \
 	&& curl -fSL -o elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
 	&& echo "$ELIXIR_DOWNLOAD_SHA256  elixir-src.tar.gz" | sha256sum -c - \
 	&& mkdir -p /usr/local/src/elixir \
