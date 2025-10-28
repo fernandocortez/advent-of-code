@@ -82,6 +82,21 @@ RUN set -ex; \
 RUN apt-get update && apt-get install -y lua5.4
 
 #
+# Install Chez Scheme
+#
+ENV CHEZ_SCHEME_VERSION="v10.2.0"
+RUN set -xe \
+	&& CHEZ_SCHEME_DIR="cs${CHEZ_SCHEME_VERSION}" \
+	&& CHEZ_SCHEME_DOWNLOAD_URL="https://github.com/cisco/ChezScheme/releases/download/${CHEZ_SCHEME_VERSION}/cs${CHEZ_SCHEME_VERSION}.tar.gz" \
+	&& CHEZ_SCHEME_DOWNLOAD_SHA256="b795916d4cfed59240c5f44b1b507a8657efd28e62e72e134d03486e9f3e374a" \
+	&& curl -fSL -o chez_scheme.tar.gz $CHEZ_SCHEME_DOWNLOAD_URL \
+	&& echo "$CHEZ_SCHEME_DOWNLOAD_SHA256  chez_scheme.tar.gz" | sha256sum -c - \
+	&& tar -xzf chez_scheme.tar.gz \
+	&& rm chez_scheme.tar.gz \
+	&& cd $CHEZ_SCHEME_DIR && ./configure && make && make install \
+	&& cd .. && rm -rf $CHEZ_SCHEME_DIR
+
+#
 # Install Go
 #
 ENV GO_LANG_VERSION="1.25.3"
