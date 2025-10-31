@@ -84,8 +84,8 @@ RUN apt-get update && apt-get install -y lua5.4
 #
 # Install Chez Scheme
 #
-ENV CHEZ_SCHEME_VERSION="v10.2.0" \
-	CHEZ_SCHEME_DOWNLOAD_SHA256="b795916d4cfed59240c5f44b1b507a8657efd28e62e72e134d03486e9f3e374a"
+ENV CHEZ_SCHEME_VERSION="v10.3.0" \
+	CHEZ_SCHEME_DOWNLOAD_SHA256="d237d9874c6e8b0ccf7758daa8286a6e825528b13ce3b2bca56eb1f73cddbc2c"
 RUN set -xe \
 	&& CHEZ_SCHEME_DIR="cs${CHEZ_SCHEME_VERSION}" \
 	&& CHEZ_SCHEME_DOWNLOAD_URL="https://github.com/cisco/ChezScheme/releases/download/${CHEZ_SCHEME_VERSION}/cs${CHEZ_SCHEME_VERSION}.tar.gz" \
