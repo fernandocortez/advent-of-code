@@ -99,8 +99,8 @@ RUN set -xe \
 #
 # Install Go
 #
-ENV GO_LANG_VERSION="1.25.3" \
-	GO_LANG_DOWNLOAD_SHA256="0335f314b6e7bfe08c3d0cfaa7c19db961b7b99fb20be62b0a826c992ad14e0f"
+ENV GO_LANG_VERSION="1.25.4" \
+	GO_LANG_DOWNLOAD_SHA256="9fa5ffeda4170de60f67f3aa0f824e426421ba724c21e133c1e35d6159ca1bec"
 RUN set -xe \
 	&& GO_LANG_DOWNLOAD_URL="https://go.dev/dl/go${GO_LANG_VERSION}.linux-amd64.tar.gz" \
 	&& curl -fSL -o go.linux-amd64.tar.gz $GO_LANG_DOWNLOAD_URL \
