@@ -1,5 +1,5 @@
 {
-	"name": "Debian",
+	"name": "Sandbox",
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
