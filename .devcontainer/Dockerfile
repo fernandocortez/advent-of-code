@@ -1,104 +1,16 @@
 FROM mcr.microsoft.com/devcontainers/base:bookworm
 
 #
-# Installing various tools
-#
-# buildpack-deps:bookworm-curl
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		ca-certificates \
-		curl \
-		gnupg \
-		netbase \
-		sq \
-		wget \
-	; \
-	rm -rf /var/lib/apt/lists/*
-# buildpack-deps:bookworm-scm
-RUN set -eux; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		git \
-		mercurial \
-		openssh-client \
-		subversion \
-		\
-		# procps is very common in build systems, and is a reasonably small package
-		procps \
-	; \
-	rm -rf /var/lib/apt/lists/*
-# buildpack-deps:bookworm
-RUN set -ex; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends \
-		autoconf \
-		automake \
-		bzip2 \
-		default-libmysqlclient-dev \
-		dpkg-dev \
-		file \
-		g++ \
-		gcc \
-		imagemagick \
-		libbz2-dev \
-		libc6-dev \
-		libcurl4-openssl-dev \
-		libdb-dev \
-		libevent-dev \
-		libffi-dev \
-		libgdbm-dev \
-		libglib2.0-dev \
-		libgmp-dev \
-		libjpeg-dev \
-		libkrb5-dev \
-		liblzma-dev \
-		libmagickcore-dev \
-		libmagickwand-dev \
-		libmaxminddb-dev \
-		libncurses5-dev \
-		libncursesw5-dev \
-		libpng-dev \
-		libpq-dev \
-		libreadline-dev \
-		libsqlite3-dev \
-		libssl-dev \
-		libtool \
-		libwebp-dev \
-		libxml2-dev \
-		libxslt-dev \
-		libyaml-dev \
-		make \
-		patch \
-		unzip \
-		xz-utils \
-		zlib1g-dev \
-	; \
-	rm -rf /var/lib/apt/lists/*
-
-#
 # Install Lua
 #
 RUN apt-get update && apt-get install -y lua5.4
 
 #
-# Install Chez Scheme
-#
-ENV CHEZ_SCHEME_VERSION="v10.3.0" \
-	CHEZ_SCHEME_DOWNLOAD_SHA256="d237d9874c6e8b0ccf7758daa8286a6e825528b13ce3b2bca56eb1f73cddbc2c"
-RUN set -xe \
-	&& CHEZ_SCHEME_DIR="cs${CHEZ_SCHEME_VERSION}" \
-	&& CHEZ_SCHEME_DOWNLOAD_URL="https://github.com/cisco/ChezScheme/releases/download/${CHEZ_SCHEME_VERSION}/cs${CHEZ_SCHEME_VERSION}.tar.gz" \
-	&& curl -fSL -o chez_scheme.tar.gz $CHEZ_SCHEME_DOWNLOAD_URL \
-	&& echo "$CHEZ_SCHEME_DOWNLOAD_SHA256  chez_scheme.tar.gz" | sha256sum -c - \
-	&& tar -xzf chez_scheme.tar.gz \
-	&& rm chez_scheme.tar.gz \
-	&& cd $CHEZ_SCHEME_DIR && ./configure && make && make install \
-	&& cd .. && rm -rf $CHEZ_SCHEME_DIR
-
-#
 # Install Racket
 #
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 ENV RACKET_VERSION="8.18" \
 	RACKET_DOWNLOAD_SHA256="72dfa7602edfe5bd2761af246709ebe93e0fd7f3a0fe98e39bd00418ab7abc70"
 RUN set -xe \
@@ -121,54 +33,3 @@ RUN set -xe \
 	&& tar -C /usr/local -xzf go.linux-amd64.tar.gz \
 	&& rm go.linux-amd64.tar.gz
 ENV PATH=$PATH:/usr/local/go/bin
-
-#
-# Install Erlang
-#
-ENV OTP_VERSION="27.3.4.5" \
-	OTP_DOWNLOAD_SHA256="5b5e3458cf78872f2d6cd87630e50cbbef96f577731a6d411e38889b5d6e58e3"
-RUN set -xe \
-	&& OTP_DOWNLOAD_URL="https://github.com/erlang/otp/releases/download/OTP-${OTP_VERSION}/otp_src_${OTP_VERSION}.tar.gz" \
-	&& runtimeDeps='libodbc1 \
-			libsctp1 \
-			libwxgtk3.2 \
-			libwxgtk-webview3.2-dev  ' \
-	&& buildDeps='unixodbc-dev \
-			libsctp-dev ' \
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends $runtimeDeps \
-	&& apt-get install -y --no-install-recommends $buildDeps \
-	&& curl -fSL -o otp-src.tar.gz "$OTP_DOWNLOAD_URL" \
-	&& echo "$OTP_DOWNLOAD_SHA256  otp-src.tar.gz" | sha256sum -c - \
-	&& export ERL_TOP="/usr/src/otp_src_${OTP_VERSION%%@*}" \
-	&& mkdir -vp $ERL_TOP \
-	&& tar -xzf otp-src.tar.gz -C $ERL_TOP --strip-components=1 \
-	&& rm otp-src.tar.gz \
-	&& ( cd $ERL_TOP \
-	  && ./otp_build autoconf \
-	  && gnuArch="$(dpkg-architecture --query DEB_HOST_GNU_TYPE)" \
-	  && ./configure --build="$gnuArch" \
-	  && make -j$(nproc) \
-	  && make -j$(nproc) docs DOC_TARGETS=chunks \
-	  && make install install-docs DOC_TARGETS=chunks ) \
-	&& find /usr/local -name examples | xargs rm -rf \
-	&& apt-get purge -y --auto-remove $buildDeps \
-	&& rm -rf $ERL_TOP /var/lib/apt/lists/*
-
-#
-# Install Elixir
-#
-ENV ELIXIR_VERSION="v1.19.2" \
-	ELIXIR_DOWNLOAD_SHA256="3bb6ceadf0174ece79649743bccf208e9708c5a9e1570228ff25c8f7347a2209" \
-	LANG=C.UTF-8
-RUN set -xe \
-	&& ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/${ELIXIR_VERSION}.tar.gz" \
-	&& curl -fSL -o elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
-	&& echo "$ELIXIR_DOWNLOAD_SHA256  elixir-src.tar.gz" | sha256sum -c - \
-	&& mkdir -p /usr/local/src/elixir \
-	&& tar -xzC /usr/local/src/elixir --strip-components=1 -f elixir-src.tar.gz \
-	&& rm elixir-src.tar.gz \
-	&& cd /usr/local/src/elixir \
-	&& make install clean \
-	&& find /usr/local/src/elixir/ -type f -not -regex "/usr/local/src/elixir/lib/[^\/]*/lib.*" -exec rm -rf {} + \
-	&& find /usr/local/src/elixir/ -type d -depth -empty -delete

@@ -18,7 +18,6 @@
 			"extensions": [
 				"evzen-wybitul.magic-racket",
 				"golang.go",
-				"jakebecker.elixir-ls",
 				"sumneko.lua"
 			]
 		}
