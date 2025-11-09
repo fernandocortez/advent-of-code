@@ -10,10 +10,13 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
+	"postCreateCommand": "raco pkg install --auto racket-langserver",
+
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"evzen-wybitul.magic-racket",
 				"golang.go",
 				"jakebecker.elixir-ls",
 				"sumneko.lua"
