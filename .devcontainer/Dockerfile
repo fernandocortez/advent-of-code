@@ -8,9 +8,17 @@ RUN apt-get update && apt-get install -y lua5.4
 #
 # Install Racket
 #
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl xz-utils \
-    && rm -rf /var/lib/apt/lists/*
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		libcairo2 \
+		libfontconfig1 \
+		libglib2.0-dev \
+		libjpeg62-turbo-dev \
+		libpango-1.0-0 \
+		libpangocairo-1.0-0 \
+	; \
+	rm -rf /var/lib/apt/lists/*
 ENV RACKET_VERSION="8.18" \
 	RACKET_DOWNLOAD_SHA256="72dfa7602edfe5bd2761af246709ebe93e0fd7f3a0fe98e39bd00418ab7abc70"
 RUN set -xe \

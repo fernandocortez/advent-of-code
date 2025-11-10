@@ -10,7 +10,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	"postCreateCommand": "raco pkg install --auto racket-langserver",
+	"postCreateCommand": "raco pkg install --auto racket-langserver && raco pkg install --auto sicp",
 
 	// Configure tool-specific properties.
 	"customizations": {
