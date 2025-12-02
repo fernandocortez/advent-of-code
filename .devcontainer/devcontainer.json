@@ -16,6 +16,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"biomejs.biome",
 				"evzen-wybitul.magic-racket",
 				"golang.go",
 				"sumneko.lua"
