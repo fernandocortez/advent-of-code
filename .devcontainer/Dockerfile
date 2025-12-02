@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/base:trixie
+FROM mcr.microsoft.com/devcontainers/javascript-node:24-trixie
 
 #
 # Install Lua
