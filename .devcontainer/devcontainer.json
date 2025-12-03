@@ -10,12 +10,14 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	"postCreateCommand": "npm ci",
+	"postCreateCommand": "pnpm install --frozen-lockfile && echo alias pn=pnpm >> ~/.bash_aliases",
 
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"prettier.prettier-vscode",
 				"sumneko.lua"
 			]
 		}

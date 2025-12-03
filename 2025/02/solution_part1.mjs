@@ -14,7 +14,9 @@ ranges.forEach((range) => {
 		const forInspection = curr.toString();
 		const length = forInspection.length;
 		const index = Math.floor(length / 2);
-		if (forInspection.substring(0, index) === forInspection.substring(index)) {
+		if (
+			forInspection.substring(0, index) === forInspection.substring(index)
+		) {
 			invalidIds.push(curr);
 		}
 		curr++;
