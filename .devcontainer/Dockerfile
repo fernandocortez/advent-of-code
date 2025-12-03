@@ -28,16 +28,3 @@ RUN set -xe \
 	&& sh racket-x86_64-linux-cs.sh --unix-style --dest /usr/local/racket \
     && rm racket-x86_64-linux-cs.sh
 ENV PATH="/usr/local/racket/bin:${PATH}"
-
-#
-# Install Go
-#
-ENV GO_LANG_VERSION="1.25.4" \
-	GO_LANG_DOWNLOAD_SHA256="9fa5ffeda4170de60f67f3aa0f824e426421ba724c21e133c1e35d6159ca1bec"
-RUN set -xe \
-	&& GO_LANG_DOWNLOAD_URL="https://go.dev/dl/go${GO_LANG_VERSION}.linux-amd64.tar.gz" \
-	&& curl -fSL -o go.linux-amd64.tar.gz $GO_LANG_DOWNLOAD_URL \
-	&& echo "$GO_LANG_DOWNLOAD_SHA256  go.linux-amd64.tar.gz" | sha256sum -c - \
-	&& tar -C /usr/local -xzf go.linux-amd64.tar.gz \
-	&& rm go.linux-amd64.tar.gz
-ENV PATH=$PATH:/usr/local/go/bin

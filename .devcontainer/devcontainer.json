@@ -17,7 +17,6 @@
 		"vscode": {
 			"extensions": [
 				"evzen-wybitul.magic-racket",
-				"golang.go",
 				"sumneko.lua"
 			]
 		}
