@@ -14,7 +14,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
-	"postCreateCommand": "pnpm install --frozen-lockfile && echo alias pn=pnpm >> ~/.bash_aliases",
+	"postCreateCommand": "pnpm install --frozen-lockfile && echo alias pn=pnpm >> ~/.zshrc",
 
 	// Configure tool-specific properties.
 	"customizations": {
